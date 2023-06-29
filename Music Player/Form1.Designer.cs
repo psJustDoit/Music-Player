@@ -54,6 +54,7 @@
             this.toolTipSpeechRecog = new System.Windows.Forms.ToolTip(this.components);
             this.btnMute = new System.Windows.Forms.Button();
             this.btnUnmute = new System.Windows.Forms.Button();
+            this.btnPlaylists = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
             this.SuspendLayout();
             // 
@@ -116,7 +117,7 @@
             // 
             // trackBarVolume
             // 
-            this.trackBarVolume.Location = new System.Drawing.Point(710, 31);
+            this.trackBarVolume.Location = new System.Drawing.Point(724, 63);
             this.trackBarVolume.Maximum = 100;
             this.trackBarVolume.Name = "trackBarVolume";
             this.trackBarVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
@@ -127,7 +128,7 @@
             // labelVolume
             // 
             this.labelVolume.AutoSize = true;
-            this.labelVolume.Location = new System.Drawing.Point(678, 222);
+            this.labelVolume.Location = new System.Drawing.Point(694, 242);
             this.labelVolume.Name = "labelVolume";
             this.labelVolume.Size = new System.Drawing.Size(50, 15);
             this.labelVolume.TabIndex = 9;
@@ -136,7 +137,7 @@
             // labelVolumeNum
             // 
             this.labelVolumeNum.AutoSize = true;
-            this.labelVolumeNum.Location = new System.Drawing.Point(736, 222);
+            this.labelVolumeNum.Location = new System.Drawing.Point(750, 242);
             this.labelVolumeNum.Name = "labelVolumeNum";
             this.labelVolumeNum.Size = new System.Drawing.Size(13, 15);
             this.labelVolumeNum.TabIndex = 10;
@@ -262,7 +263,7 @@
             // btnMute
             // 
             this.btnMute.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnMute.Location = new System.Drawing.Point(680, 240);
+            this.btnMute.Location = new System.Drawing.Point(694, 269);
             this.btnMute.Name = "btnMute";
             this.btnMute.Size = new System.Drawing.Size(75, 23);
             this.btnMute.TabIndex = 23;
@@ -273,7 +274,7 @@
             // btnUnmute
             // 
             this.btnUnmute.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnUnmute.Location = new System.Drawing.Point(680, 240);
+            this.btnUnmute.Location = new System.Drawing.Point(694, 269);
             this.btnUnmute.Name = "btnUnmute";
             this.btnUnmute.Size = new System.Drawing.Size(75, 23);
             this.btnUnmute.TabIndex = 24;
@@ -281,11 +282,23 @@
             this.btnUnmute.UseVisualStyleBackColor = true;
             this.btnUnmute.Click += new System.EventHandler(this.btnUnmute_Click);
             // 
+            // btnPlaylists
+            // 
+            this.btnPlaylists.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnPlaylists.Location = new System.Drawing.Point(694, 12);
+            this.btnPlaylists.Name = "btnPlaylists";
+            this.btnPlaylists.Size = new System.Drawing.Size(75, 23);
+            this.btnPlaylists.TabIndex = 25;
+            this.btnPlaylists.Text = "Playlists";
+            this.btnPlaylists.UseVisualStyleBackColor = true;
+            this.btnPlaylists.Click += new System.EventHandler(this.btnPlaylists_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnPlaylists);
             this.Controls.Add(this.btnUnmute);
             this.Controls.Add(this.btnMute);
             this.Controls.Add(this.btnSpeechRecog);
@@ -343,5 +356,6 @@
         private ToolTip toolTipSpeechRecog;
         private Button btnMute;
         private Button btnUnmute;
+        private Button btnPlaylists;
     }
 }

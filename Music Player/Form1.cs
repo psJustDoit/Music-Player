@@ -6,6 +6,7 @@ namespace Music_Player
     public partial class Form1 : Form
     {
         string songFolderPath = @"C:\Users\PC\Desktop\AVG Music Player Songs";
+        string playlistsFolderPath = @"C:\Users\PC\Desktop\AVG Music Player Songs\Playlists";
         bool isShuffleEnabled = false;
         MusicPlayer player = new MusicPlayer();
         SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine(new System.Globalization.CultureInfo("en-US"));
@@ -19,11 +20,13 @@ namespace Music_Player
 
         public Form1()
         {
-            //Create folder with songs if it does not exist already
             InitializeComponent();
+
+            //Create folder with songs if it does not exist already and create playlists folder
             if (!Directory.Exists(songFolderPath))
             {
                 Directory.CreateDirectory(songFolderPath);
+                Directory.CreateDirectory(playlistsFolderPath);
             }
 
             //Fill list box with songs from folder
@@ -45,6 +48,9 @@ namespace Music_Player
             btnPause.Visible = true;
             btnPause.Enabled = true;
 
+            btnPlay.Visible = false;
+            btnPlay.Enabled = false;
+
             //Mute
             btnMute.Enabled = true;
             btnMute.Visible= true;
@@ -53,7 +59,6 @@ namespace Music_Player
             btnUnmute.Visible = false;
 
             //Speech recognition
-            recognizer.SetInputToDefaultAudioDevice();
             RefreshSpeechRecogChoices();
         }  
 
@@ -100,14 +105,21 @@ namespace Music_Player
 
         public void RefreshSpeechRecogChoices()
         {
-            choices = new Choices(FillChoices());
-            grammarBuilder = new GrammarBuilder(choices);
-            grammar = new Grammar(grammarBuilder);
-            recognizer.LoadGrammar(grammar);
+            try
+            {
+                choices = new Choices(FillChoices());
+                grammarBuilder = new GrammarBuilder(choices);
+                grammar = new Grammar(grammarBuilder);
+                recognizer.LoadGrammar(grammar);
+            }
+            catch(Exception ex)
+            {
+                //Song folder will be empty when first created
+                //Do nothing if song folder is empty
+            }
         }
         public void RefreshSongList()
         {
-            
             listBoxAllSongs.Items.Clear();
             DirectoryInfo directoryInfo = new DirectoryInfo(songFolderPath);
             FileInfo[] songs = directoryInfo.GetFiles("*.mp3");
@@ -182,24 +194,38 @@ namespace Music_Player
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            btnPlay.Enabled = true;
-            btnPlay.Visible = true;
+            if (CheckActiveSong())
+            {
+                player.PauseSong();
 
-            btnPause.Visible = false;
-            btnPause.Enabled = false;
+                btnPlay.Enabled = true;
+                btnPlay.Visible = true;
 
-            player.PauseSong();
+                btnPause.Visible = false;
+                btnPause.Enabled = false;
+            }
+            else
+            {
+                MessageBox.Show("No active song!");
+            }
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            btnPause.Enabled = true;
-            btnPause.Visible = true;
+            if (CheckActiveSong())
+            {
+                player.ResumeSong();
 
-            btnPlay.Visible= false;
-            btnPlay.Enabled = false;
+                btnPause.Enabled = true;
+                btnPause.Visible = true;
 
-            player.ResumeSong();
+                btnPlay.Visible = false;
+                btnPlay.Enabled = false;
+            }
+            else
+            {
+                MessageBox.Show("No active song!");
+            }
         }
 
         private void btnPrevious_Click(object sender, EventArgs e)
@@ -240,7 +266,27 @@ namespace Music_Player
 
             //Disable speech recognition button when talking and enable back when everything is done
             btnSpeechRecog.Enabled = false;
+
+            recognizer.SetInputToDefaultAudioDevice();
             RecognitionResult result = recognizer.Recognize();
+            VoicePlaySong(result);
+
+            btnSpeechRecog.Enabled = true;
+        }
+
+        public bool CheckActiveSong()
+        {
+            string currSong = textBoxSongName.Text;
+            if (currSong == "")
+            {
+                MessageBox.Show("No active song!");
+                return false;
+            }
+            return true;
+        }
+
+        public void VoicePlaySong(RecognitionResult result)
+        {
             string song = VoiceRecogFoundSong(result);
             if (song == "")
             {
@@ -248,7 +294,6 @@ namespace Music_Player
             }
             else
             {
-                //MessageBox.Show(song.ToString());
                 player.PlaySong(songFolderPath, song.ToString());
 
                 btnPause.Enabled = true;
@@ -259,7 +304,6 @@ namespace Music_Player
 
                 ChangeCurrentSongName(song.ToString());
             }
-            btnSpeechRecog.Enabled = true;
         }
 
         public string VoiceRecogFoundSong(RecognitionResult result)
@@ -311,6 +355,12 @@ namespace Music_Player
             }
 
             return choiceList.ToArray();
+        }
+
+        private void btnPlaylists_Click(object sender, EventArgs e)
+        {
+            FormPlaylists formPlaylists = new FormPlaylists(listBoxAllSongs.Items, songFolderPath);
+            formPlaylists.Show();
         }
     }
 }
